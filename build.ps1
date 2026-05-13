@@ -141,10 +141,10 @@ Write-Host "[build] Assembling HTML..."
 
 $html = @"
 <!DOCTYPE html>
-<html lang=\"en\">
+<html lang="en">
 <head>
-  <meta charset=\"UTF-8\">
-  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Case Report</title>
   <style>
 $cssOl
@@ -157,105 +157,118 @@ $cssDashboard
   </style>
 </head>
 <body>
+
   <!-- Loading overlay -->
-  <div id=\"loader\">
-    <div class=\"loader-content\">
-      <div class=\"spinner\"></div>
+  <div id="loader">
+    <div class="loader-content">
+      <div class="spinner"></div>
       <p>Loading report data&hellip;</p>
     </div>
   </div>
+
   <!-- Sidebar -->
-  <aside class=\"sidebar\" id=\"sidebar\">
-    <button class=\"sidebar-toggle\" id=\"sidebar-toggle\" title=\"Toggle menu\">
-      <span id=\"sidebar-toggle-icon\">&#9776;</span>
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle menu">
+      <span id="sidebar-toggle-icon">&#9776;</span>
     </button>
-    <nav class=\"sidebar-nav\" id=\"main-nav\">
-      <button data-tab=\"section-dashboard\" class=\"active\">
-        <span class=\"nav-icon\">&#9632;</span>
-        <span class=\"nav-label\">Dashboard</span>
+
+    <nav class="sidebar-nav" id="main-nav">
+      <button data-tab="section-dashboard" class="active">
+        <span class="nav-icon">&#9632;</span>
+        <span class="nav-label">Dashboard</span>
       </button>
-      <button data-tab=\"section-data\">
-        <span class=\"nav-icon\">&#9776;</span>
-        <span class=\"nav-label\">Data</span>
+      <button data-tab="section-data">
+        <span class="nav-icon">&#9776;</span>
+        <span class="nav-label">Data</span>
       </button>
-      <button data-tab=\"section-analysis\">
-        <span class=\"nav-icon\">&#128200;</span>
-        <span class=\"nav-label\">Analysis</span>
-      </button>
-      <button data-tab=\"section-map\">
-        <span class=\"nav-icon\">&#9873;</span>
-        <span class=\"nav-label\">Map</span>
+      <button data-tab="section-map">
+        <span class="nav-icon">&#9873;</span>
+        <span class="nav-label">Map</span>
       </button>
     </nav>
-    <div class=\"sidebar-footer\">
-      <span class=\"theme-toggle-label\" title=\"Light mode\">&#9728;</span>
-      <label class=\"theme-switch\">
-        <input type=\"checkbox\" id=\"theme-checkbox\">
-        <span class=\"theme-slider\"></span>
+
+    <div class="sidebar-footer">
+      <span class="theme-toggle-label" title="Light mode">&#9728;</span>
+      <label class="theme-switch">
+        <input type="checkbox" id="theme-checkbox">
+        <span class="theme-slider"></span>
       </label>
-      <span class=\"theme-toggle-label theme-label-text\" title=\"Dark mode\">&#9790;</span>
+      <span class="theme-toggle-label theme-label-text" title="Dark mode">&#9790;</span>
     </div>
   </aside>
+
+  <!-- Header -->
   <header>
-    <div class=\"header-inner\">
-      <h1>Case Report &mdash; <span id=\"case-name\">Loading&hellip;</span></h1>
+    <div class="header-top">
+      <div class="branding">
+        <img src="$logoDataUri" alt="Gladiator Forensics" class="branding-logo">
+        <span class="branding-company">Gladiator Forensics</span>
+      </div>
+
+      <div class="case-title">
+        <span class="case-title-label">Case Name</span>
+        <span class="case-title-name" id="case-name">Loading&hellip;</span>
+      </div>
+
+      <div class="client-branding">
+        <span class="client-name" id="client-name">Loading&hellip;</span>
+        <img src="$clientLogoDataUri" alt="Client" class="client-logo" id="client-logo">
+      </div>
     </div>
   </header>
+
   <main>
-    <section id=\"section-dashboard\" class=\"tab-content\">
-      <div class=\"kpi-row\">
-        <div class=\"kpi-card\">
+    <section id="section-dashboard" class="tab-content">
+      <div class="kpi-row">
+        <div class="kpi-card">
           <h3>Total Items</h3>
-          <span id=\"kpi-total\" class=\"kpi-value\">&mdash;</span>
+          <span id="kpi-total" class="kpi-value">&mdash;</span>
         </div>
-        <div class=\"kpi-card\">
+        <div class="kpi-card">
           <h3>Open</h3>
-          <span id=\"kpi-open\" class=\"kpi-value\">&mdash;</span>
+          <span id="kpi-open" class="kpi-value">&mdash;</span>
         </div>
-        <div class=\"kpi-card\">
+        <div class="kpi-card">
           <h3>Closed</h3>
-          <span id=\"kpi-closed\" class=\"kpi-value\">&mdash;</span>
+          <span id="kpi-closed" class="kpi-value">&mdash;</span>
         </div>
-        <div class=\"kpi-card\">
+        <div class="kpi-card">
           <h3>Total Amount</h3>
-          <span id=\"kpi-amount\" class=\"kpi-value\">&mdash;</span>
+          <span id="kpi-amount" class="kpi-value">&mdash;</span>
         </div>
       </div>
-      <div class=\"chart-row\">
-        <div class=\"chart-container\">
+      <div class="chart-row">
+        <div class="chart-container">
           <h3>Status Distribution</h3>
-          <canvas id=\"chart-status\"></canvas>
+          <canvas id="chart-status"></canvas>
         </div>
-        <div class=\"chart-container\">
+        <div class="chart-container">
           <h3>Timeline</h3>
-          <canvas id=\"chart-timeline\"></canvas>
+          <canvas id="chart-timeline"></canvas>
         </div>
       </div>
     </section>
-    <section id=\"section-data\" class=\"tab-content\" hidden>
+
+    <section id="section-data" class="tab-content" hidden>
       <h2>Case Items</h2>
-      <div id=\"grid-cases\" class=\"ag-theme-alpine\" style=\"width:100%;height:600px;\"></div>
+      <div id="grid-cases" class="ag-theme-alpine" style="width:100%; height:600px;"></div>
     </section>
-    <section id=\"section-analysis\" class=\"tab-content\" hidden>
-      <h2>Analysis</h2>
-      <div id=\"analysis-controls\" style=\"margin-bottom: 16px;\">
-        <label for=\"analysis-select\">Choose analysis type: </label>
-        <select id=\"analysis-select\"></select>
-      </div>
-      <div id=\"grid-analysis\" class=\"ag-theme-alpine\" style=\"width:100%; height:600px;\"></div>
-    </section>
-    <section id=\"section-map\" class=\"tab-content\" hidden>
+
+    <section id="section-map" class="tab-content" hidden>
       <h2>Locations</h2>
-      <div id=\"map-container\" style=\"width:100%; height:600px;\"></div>
+      <div id="map-container" style="width:100%; height:600px;"></div>
     </section>
   </main>
+
   <footer>
-    <p>Report generated on <span id=\"report-date\"></span></p>
+    <p>Report generated on <span id="report-date"></span></p>
   </footer>
+
   <script>
-    window.__INLINE_WASM_BASE64 = "$wasmB64"
-    window.__INLINE_SQLITE_BASE64 = "$sqliteB64"
+    window.__INLINE_WASM_BASE64 = "$wasmB64";
+    window.__INLINE_SQLITE_BASE64 = "$sqliteB64";
   </script>
+
   <script>
 $jsSqlWasm
   </script>
@@ -268,6 +281,7 @@ $jsChartJs
   <script>
 $jsOl
   </script>
+
   <script>
 $jsDb
   </script>
