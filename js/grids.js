@@ -47,12 +47,48 @@ ReportApp.grids = (function () {
     _gridApi = agGrid.createGrid(containerEl, gridOptions);
   }
 
+  // ------ Analysis grid ------
+  function initAnalysisGrid(containerEl, analysisId) {
+    if (!containerEl) return;
+    // Get SQL from analysis table
+    var analysis = db().queryOne('SELECT sql FROM call_analyses WHERE analysis_id=?', [analysisId]);
+    if (!analysis || !analysis.sql) {
+      containerEl.innerHTML = '<div style="color:red">Analysis SQL not found!</div>';
+      return;
+    }
+    var rows = db().queryAll(analysis.sql);
+    if (!rows || rows.length === 0) {
+      containerEl.innerHTML = '<div>No data for this analysis.</div>';
+      return;
+    }
+    var columnDefs = Object.keys(rows[0]).map(function (k) {
+      return {
+        headerName: k.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); }),
+        field: k,
+        sortable: true,
+        filter: true,
+        resizable: true
+      };
+    });
+    containerEl.innerHTML = '';
+    var gridDiv = document.createElement('div');
+    gridDiv.style.width = '100%';
+    gridDiv.style.height = '100%';
+    containerEl.appendChild(gridDiv);
+    new agGrid.Grid(gridDiv, {
+      columnDefs: columnDefs,
+      rowData: rows,
+      defaultColDef: { flex: 1 }
+    });
+  }
+
   function getGridApi() {
     return _gridApi;
   }
 
   return {
     initCaseGrid: initCaseGrid,
+    initAnalysisGrid: initAnalysisGrid,
     getGridApi: getGridApi
   };
 })();
