@@ -1,5 +1,5 @@
 /**
- * Application bootstrap and tab navigation.
+ * Application bootstrap, tab navigation, and theme switching.
  */
 window.ReportApp = window.ReportApp || {};
 
@@ -8,6 +8,29 @@ ReportApp.init = async function () {
 
   var loader = document.getElementById('loader');
   var tabsInitialised = {};
+
+  // ===== Theme Toggle =====
+  var themeCheckbox = document.getElementById('theme-checkbox');
+  var savedTheme = localStorage.getItem('report-theme');
+
+  function applyTheme(dark) {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    themeCheckbox.checked = dark;
+    try { localStorage.setItem('report-theme', dark ? 'dark' : 'light'); } catch(e) {}
+  }
+
+  // Initialise theme: saved preference > system preference > light
+  if (savedTheme) {
+    applyTheme(savedTheme === 'dark');
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    applyTheme(true);
+  } else {
+    applyTheme(false);
+  }
+
+  themeCheckbox.addEventListener('change', function () {
+    applyTheme(this.checked);
+  });
 
   try {
     // 1. Load the database

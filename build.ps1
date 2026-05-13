@@ -145,6 +145,15 @@ $cssDashboard
         <button data-tab="section-dashboard" class="active">Dashboard</button>
         <button data-tab="section-data">Data</button>
         <button data-tab="section-map">Map</button>
+
+        <div class="theme-toggle">
+          <span class="theme-toggle-label" title="Light mode">&#9728;</span>
+          <label class="theme-switch">
+            <input type="checkbox" id="theme-checkbox">
+            <span class="theme-slider"></span>
+          </label>
+          <span class="theme-toggle-label" title="Dark mode">&#9790;</span>
+        </div>
       </nav>
     </div>
   </header>

@@ -13,8 +13,22 @@
   --color-text: #202124;
   --color-text-secondary: #5f6368;
   --color-border: #dadce0;
+  --color-loader-bg: rgba(255,255,255,0.95);
   --radius: 8px;
   --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+}
+
+/* ===== Dark Theme ===== */
+[data-theme="dark"] {
+  --color-primary: #8ab4f8;
+  --color-primary-dark: #669df6;
+  --color-bg: #1e1e1e;
+  --color-surface: #2d2d2d;
+  --color-text: #e8eaed;
+  --color-text-secondary: #9aa0a6;
+  --color-border: #3c4043;
+  --color-loader-bg: rgba(30,30,30,0.95);
+  --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
 }
 
 html {
@@ -26,13 +40,14 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.5;
+  transition: background 0.3s, color 0.3s;
 }
 
 /* ===== Loader ===== */
 #loader {
   position: fixed;
   inset: 0;
-  background: rgba(255,255,255,0.95);
+  background: var(--color-loader-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,6 +80,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: background 0.3s, border-color 0.3s;
 }
 
 .header-inner {
@@ -85,6 +101,7 @@ header h1 {
 #main-nav {
   display: flex;
   gap: 4px;
+  align-items: center;
 }
 
 #main-nav button {
@@ -105,6 +122,68 @@ header h1 {
 #main-nav button.active {
   background: var(--color-primary);
   color: #fff;
+}
+
+[data-theme="dark"] #main-nav button.active {
+  color: #1e1e1e;
+}
+
+/* ===== Theme Toggle ===== */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 1px solid var(--color-border);
+}
+
+.theme-toggle-label {
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+}
+
+.theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.theme-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: var(--color-border);
+  border-radius: 24px;
+  transition: background 0.3s;
+}
+
+.theme-slider::before {
+  content: '';
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.theme-switch input:checked + .theme-slider {
+  background: var(--color-primary);
+}
+
+.theme-switch input:checked + .theme-slider::before {
+  transform: translateX(20px);
 }
 
 /* ===== Main ===== */
@@ -131,7 +210,8 @@ footer {
 
 /* ===== Map Popup ===== */
 .ol-popup {
-  background: white;
+  background: var(--color-surface);
+  color: var(--color-text);
   border-radius: 6px;
   padding: 10px 14px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
@@ -141,16 +221,28 @@ footer {
 
 .popup-item {
   padding: 2px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .popup-item:last-child {
   border-bottom: none;
 }
 
+/* ===== AG Grid Dark Theme Override ===== */
+[data-theme="dark"] .ag-theme-alpine {
+  --ag-background-color: #2d2d2d;
+  --ag-header-background-color: #353535;
+  --ag-odd-row-background-color: #323232;
+  --ag-row-hover-color: #3a3a3a;
+  --ag-border-color: #3c4043;
+  --ag-foreground-color: #e8eaed;
+  --ag-header-foreground-color: #e8eaed;
+  --ag-secondary-foreground-color: #9aa0a6;
+}
+
 /* ===== Print ===== */
 @media print {
-  #loader, header nav, footer { display: none !important; }
+  #loader, header nav, footer, .theme-toggle { display: none !important; }
   header { position: static; }
   .tab-content { display: block !important; }
   .tab-content[hidden] { display: block !important; }
