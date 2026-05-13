@@ -117,7 +117,7 @@ ReportApp.init = async function () {
           } else if (targetId === 'section-map') {
             ReportApp.map.init('map-container');
           } else if (targetId === 'section-analysis') {
-              ReportApp.analysis && ReportApp.analysis.init();
+            ReportApp.analysis.init();
           }
         }
 
@@ -129,22 +129,25 @@ ReportApp.init = async function () {
 
       // Initialize the analysis module in ReportApp namespace
       ReportApp.analysis = {
-          async init() {
-              // Get all analyses from DB and populate the dropdown
-              const analyses = ReportApp.db.queryAll('SELECT analysis_id, analysis_name FROM call_analyses');
-              const select = document.getElementById('analysis-select');
+          init: function () {
+              // Get all analysis definitions
+              var analyses = ReportApp.db.query('SELECT analysis_id, analysis_name FROM call_analyses');
+              var select = document.getElementById('analysis-select');
               select.innerHTML = '';
-              analyses.forEach(anl =>
-                  select.innerHTML += `<option value="${anl.analysis_id}">${anl.analysis_name}</option>`
-              );
-              // Load grid for the first analysis by default, if present
-              if (analyses.length > 0) {
-                  ReportApp.grids.initAnalysisGrid(document.getElementById('analysis-grid'), analyses[0].analysis_id);
-              }
-              // Event to change grid on selection
+              analyses.forEach(function (anl) {
+                  var option = document.createElement('option');
+                  option.value = anl.analysis_id;
+                  option.textContent = anl.analysis_name;
+                  select.appendChild(option);
+              });
+              // Always set event listener after innerHTML/appending!
               select.onchange = function () {
-                  ReportApp.grids.initAnalysisGrid(document.getElementById('analysis-grid'), this.value);
+                  ReportApp.grids.initAnalysisGrid(document.getElementById('grid-analysis'), this.value);
               };
+              // Show first grid (if any)
+              if (analyses.length > 0) {
+                  ReportApp.grids.initAnalysisGrid(document.getElementById('grid-analysis'), analyses[0].analysis_id);
+              }
           }
       };
 
