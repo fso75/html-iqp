@@ -18,6 +18,7 @@
   --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
   --sidebar-width: 240px;
   --sidebar-collapsed: 60px;
+  --header-height: 80px;
 }
 
 /* ===== Dark Theme ===== */
@@ -201,7 +202,8 @@ body {
 header {
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
-  padding: 12px 24px;
+  padding: 0 24px;
+  height: var(--header-height);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -220,7 +222,7 @@ header {
   align-items: center;
   justify-content: space-between;
   position: relative;
-  min-height: 60px;
+  height: 100%;
 }
 
 /* ===== Branding (top-left) ===== */
@@ -229,10 +231,11 @@ header {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+  height: 100%;
 }
 
 .branding-logo {
-  height: 56px;
+  height: calc(var(--header-height) - 16px);
   width: auto;
   object-fit: contain;
 }
@@ -277,28 +280,20 @@ header {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+  height: 100%;
 }
 
 .client-logo {
-  height: 48px;
+  height: calc(var(--header-height) - 16px);
   width: auto;
   object-fit: contain;
 }
 
 .client-name {
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--color-text);
   text-align: right;
-}
-
-.client-name-label {
-  display: block;
-  font-size: 0.65rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-text-secondary);
 }
 
 /* ===== Theme Toggle ===== */

@@ -211,10 +211,7 @@ $cssDashboard
       </div>
 
       <div class="client-branding">
-        <div class="client-name">
-          <span class="client-name-label">Client</span>
-          <span id="client-name">Loading&hellip;</span>
-        </div>
+        <span class="client-name" id="client-name">Loading&hellip;</span>
         <img src="$clientLogoDataUri" alt="Client" class="client-logo" id="client-logo">
       </div>
     </div>
