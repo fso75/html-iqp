@@ -206,7 +206,7 @@ $cssDashboard
       </div>
 
       <div class="case-title">
-        <span class="case-title-label">Case Report</span>
+        <span class="case-title-label">Case Name</span>
         <span class="case-title-name" id="case-name">Loading&hellip;</span>
       </div>
 
