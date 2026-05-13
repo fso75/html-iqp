@@ -18,20 +18,34 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-function FileToBase64([string]$path) {
-    $bytes = [System.IO.File]::ReadAllBytes($path)
+# Resolve all paths relative to the script's own directory
+$root = $PSScriptRoot
+
+function Resolve([string]$relativePath) {
+    return Join-Path $root $relativePath
+}
+
+function FileToBase64([string]$relativePath) {
+    $fullPath = Resolve $relativePath
+    $bytes = [System.IO.File]::ReadAllBytes($fullPath)
     return [System.Convert]::ToBase64String($bytes)
 }
 
-function ReadText([string]$path) {
-    return [System.IO.File]::ReadAllText($path, [System.Text.Encoding]::UTF8)
+function ReadText([string]$relativePath) {
+    $fullPath = Resolve $relativePath
+    return [System.IO.File]::ReadAllText($fullPath, [System.Text.Encoding]::UTF8)
 }
+
+# Resolve input/output paths relative to script root
+$SqlitePath = Resolve $SqlitePath
+$OutputPath = Resolve $OutputPath
 
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host "  Building self-contained report..." -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
+Write-Host "[build] Root:    $root"
 Write-Host "[build] SQLite:  $SqlitePath"
 Write-Host "[build] Output:  $OutputPath"
 Write-Host ""
@@ -54,10 +68,10 @@ $requiredFiles = @(
     "js\app.js"
 )
 
-$missing = $requiredFiles | Where-Object { -not (Test-Path $_) }
+$missing = $requiredFiles | Where-Object { -not (Test-Path (Resolve $_)) }
 if ($missing) {
     Write-Host "[build] ERROR: Missing files:" -ForegroundColor Red
-    $missing | ForEach-Object { Write-Host "         - $_" -ForegroundColor Red }
+    $missing | ForEach-Object { Write-Host "         - $(Resolve $_)" -ForegroundColor Red }
     exit 1
 }
 
@@ -72,7 +86,8 @@ $wasmB64 = FileToBase64 "js\vendor\sql-wasm.wasm"
 Write-Host "         $($wasmB64.Length.ToString('N0')) chars"
 
 Write-Host "[build] Encoding SQLite..."
-$sqliteB64 = FileToBase64 $SqlitePath
+$bytes = [System.IO.File]::ReadAllBytes($SqlitePath)
+$sqliteB64 = [System.Convert]::ToBase64String($bytes)
 Write-Host "         $($sqliteB64.Length.ToString('N0')) chars"
 
 # Read all text assets
