@@ -1,7 +1,12 @@
 /**
  * Database Access Layer
  * Uses sql.js (WebAssembly) to read the SQLite file entirely client-side.
- * All file loading uses XMLHttpRequest for file:// compatibility.
+ *
+ * Supports two modes:
+ *   1. INLINE mode  - WASM and SQLite are embedded as base64 in the HTML (for distribution)
+ *   2. XHR mode     - files loaded via XMLHttpRequest (for development with Live Server)
+ *
+ * The build script (build.py) sets window.__INLINE_WASM_BASE64 and window.__INLINE_SQLITE_BASE64.
  */
 window.ReportApp = window.ReportApp || {};
 
@@ -11,8 +16,20 @@ ReportApp.db = (function () {
   var _db = null;
 
   /**
+   * Decode a base64 string to a Uint8Array.
+   */
+  function base64ToUint8Array(base64) {
+    var raw = atob(base64);
+    var arr = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) {
+      arr[i] = raw.charCodeAt(i);
+    }
+    return arr;
+  }
+
+  /**
    * Load a file as an ArrayBuffer using XMLHttpRequest.
-   * Works on file:// protocol (fetch does NOT).
+   * Works on file:// protocol in most browsers (except .wasm in Chrome).
    */
   function loadFileAsArrayBuffer(path) {
     return new Promise(function (resolve, reject) {
@@ -35,18 +52,29 @@ ReportApp.db = (function () {
 
   /**
    * Initialise the database.
-   * Loads the WASM binary manually so sql.js never calls fetch() internally.
+   * Automatically detects inline mode vs XHR mode.
    */
   async function initDB(sqlitePath) {
     sqlitePath = sqlitePath || 'data/report.sqlite';
 
-    // Load WASM binary via XHR (file:// safe)
-    var wasmBinary = await loadFileAsArrayBuffer('js/vendor/sql-wasm.wasm');
+    var wasmBinary, sqliteData;
+    var isInline = window.__INLINE_WASM_BASE64 && window.__INLINE_SQLITE_BASE64;
+
+    if (isInline) {
+      // INLINE MODE: decode base64 data embedded in the HTML
+      console.log('[ReportApp] Using inline mode (base64 embedded data)');
+      wasmBinary = base64ToUint8Array(window.__INLINE_WASM_BASE64).buffer;
+      sqliteData = base64ToUint8Array(window.__INLINE_SQLITE_BASE64);
+    } else {
+      // XHR MODE: load files from disk (development)
+      console.log('[ReportApp] Using XHR mode (loading files from disk)');
+      wasmBinary = await loadFileAsArrayBuffer('js/vendor/sql-wasm.wasm');
+      var sqliteBuffer = await loadFileAsArrayBuffer(sqlitePath);
+      sqliteData = new Uint8Array(sqliteBuffer);
+    }
 
     var SQL = await initSqlJs({ wasmBinary: wasmBinary });
-
-    var sqliteBuffer = await loadFileAsArrayBuffer(sqlitePath);
-    _db = new SQL.Database(new Uint8Array(sqliteBuffer));
+    _db = new SQL.Database(sqliteData);
 
     return _db;
   }
