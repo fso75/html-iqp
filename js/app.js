@@ -11,7 +11,7 @@ ReportApp.init = async function () {
 
   try {
     // 1. Load the database
-    await ReportApp.db.initDB('data/report.sqlite');
+    await ReportApp.db.initDB('data/report.db');
 
     // 2. Set report metadata
     var meta = ReportApp.db.queryOne(
