@@ -1,5 +1,5 @@
 /**
- * Application bootstrap, tab navigation, and theme switching.
+ * Application bootstrap, tab navigation, sidebar, and theme switching.
  */
 window.ReportApp = window.ReportApp || {};
 
@@ -19,7 +19,6 @@ ReportApp.init = async function () {
     try { localStorage.setItem('report-theme', dark ? 'dark' : 'light'); } catch(e) {}
   }
 
-  // Initialise theme: saved preference > system preference > light
   if (savedTheme) {
     applyTheme(savedTheme === 'dark');
   } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -30,6 +29,39 @@ ReportApp.init = async function () {
 
   themeCheckbox.addEventListener('change', function () {
     applyTheme(this.checked);
+  });
+
+  // ===== Sidebar Toggle =====
+  var sidebar = document.getElementById('sidebar');
+  var sidebarToggle = document.getElementById('sidebar-toggle');
+  var toggleIcon = document.getElementById('sidebar-toggle-icon');
+  var savedSidebar = localStorage.getItem('report-sidebar');
+
+  function setSidebarState(collapsed) {
+    if (collapsed) {
+      sidebar.classList.add('collapsed');
+      document.body.classList.add('sidebar-collapsed-state');
+      toggleIcon.innerHTML = '&#9776;';
+    } else {
+      sidebar.classList.remove('collapsed');
+      document.body.classList.remove('sidebar-collapsed-state');
+      toggleIcon.innerHTML = '&#10005;';
+    }
+    try { localStorage.setItem('report-sidebar', collapsed ? 'collapsed' : 'expanded'); } catch(e) {}
+
+    // Recalc map size after sidebar animation
+    setTimeout(function () {
+      if (ReportApp.map && ReportApp.map.getMap()) {
+        ReportApp.map.getMap().updateSize();
+      }
+    }, 350);
+  }
+
+  // Init sidebar: saved preference or expanded by default
+  setSidebarState(savedSidebar === 'collapsed');
+
+  sidebarToggle.addEventListener('click', function () {
+    setSidebarState(!sidebar.classList.contains('collapsed'));
   });
 
   try {

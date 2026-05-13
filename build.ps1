@@ -161,6 +161,38 @@ $cssDashboard
     </div>
   </div>
 
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle menu">
+      <span id="sidebar-toggle-icon">&#9776;</span>
+    </button>
+
+    <nav class="sidebar-nav" id="main-nav">
+      <button data-tab="section-dashboard" class="active">
+        <span class="nav-icon">&#9632;</span>
+        <span class="nav-label">Dashboard</span>
+      </button>
+      <button data-tab="section-data">
+        <span class="nav-icon">&#9776;</span>
+        <span class="nav-label">Data</span>
+      </button>
+      <button data-tab="section-map">
+        <span class="nav-icon">&#9873;</span>
+        <span class="nav-label">Map</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="theme-toggle-label" title="Light mode">&#9728;</span>
+      <label class="theme-switch">
+        <input type="checkbox" id="theme-checkbox">
+        <span class="theme-slider"></span>
+      </label>
+      <span class="theme-toggle-label theme-label-text" title="Dark mode">&#9790;</span>
+    </div>
+  </aside>
+
+  <!-- Header -->
   <header>
     <div class="header-top">
       <div class="branding">
@@ -174,20 +206,8 @@ $cssDashboard
       </div>
 
       <div class="theme-toggle">
-        <span class="theme-toggle-label" title="Light mode">&#9728;</span>
-        <label class="theme-switch">
-          <input type="checkbox" id="theme-checkbox">
-          <span class="theme-slider"></span>
-        </label>
-        <span class="theme-toggle-label" title="Dark mode">&#9790;</span>
       </div>
     </div>
-
-    <nav class="header-nav" id="main-nav">
-      <button data-tab="section-dashboard" class="active">Dashboard</button>
-      <button data-tab="section-data">Data</button>
-      <button data-tab="section-map">Map</button>
-    </nav>
   </header>
 
   <main>
