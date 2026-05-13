@@ -177,6 +177,10 @@ $cssDashboard
         <span class="nav-icon">&#9632;</span>
         <span class="nav-label">Dashboard</span>
       </button>
+      <button data-tab="section-analysis">
+          <span class="nav-icon">&#128200;</span>
+          <span class="nav-label">Analysis</span>
+      </button>
       <button data-tab="section-data">
         <span class="nav-icon">&#9776;</span>
         <span class="nav-label">Data</span>
@@ -247,6 +251,15 @@ $cssDashboard
           <canvas id="chart-timeline"></canvas>
         </div>
       </div>
+    </section>
+
+    <section id="section-analysis" class="tab-content" hidden>
+        <h2>Analysis</h2>
+        <div id="analysis-controls" style="margin-bottom: 16px;">
+            <label for="analysis-select">Choose analysis type: </label>
+            <select id="analysis-select"></select>
+        </div>
+        <div id="grid-analysis" class="ag-theme-alpine" style="width:100%; height:600px;"></div>
     </section>
 
     <section id="section-data" class="tab-content" hidden>

@@ -82,6 +82,38 @@ ReportApp.grids = (function () {
     });
   }
 
+    // Render Analysis result into AG Grid (call_analyses stores different SQLs)
+    ReportApp.grids.initAnalysisGrid = function (container, analysis_id) {
+        // Get the SQL statement or table for this analysis.
+        const desc = ReportApp.db.queryOne('SELECT sql FROM call_analyses WHERE analysis_id=?', [analysis_id]);
+        if (!desc || !desc.sql) {
+            container.innerHTML = '<div style="color:red">Analysis SQL not found!</div>';
+            return;
+        } ReportApp.grids = ReportApp.grids || {};
+        // Run the SQL to get rows
+        const rows = ReportApp.db.queryAll(desc.sql);
+        if (!rows || rows.length === 0) {
+            container.innerHTML = '<div>No data for this analysis.</div>';
+            return;
+        }
+        // Build column definitions from row keys
+        const columnDefs = Object.keys(rows[0]).map(k => ({
+            headerName: k,
+            field: k,
+            sortable: true,
+            filter: true,
+            resizable: true
+        }));
+        // Clear container
+        container.innerHTML = '';
+        // Render AG Grid
+        new agGrid.Grid(container, {
+            columnDefs,
+            rowData: rows,
+            defaultColDef: { flex: 1 }
+        });
+    };
+
   function getGridApi() {
     return _gridApi;
   }

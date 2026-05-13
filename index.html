@@ -29,13 +29,13 @@
                 <span class="nav-icon">&#9632;</span>
                 <span class="nav-label">Dashboard</span>
             </button>
-            <button data-tab="section-data">
-                <span class="nav-icon">&#9776;</span>
-                <span class="nav-label">Data</span>
-            </button>
             <button data-tab="section-analysis">
                 <span class="nav-icon">&#128200;</span>
                 <span class="nav-label">Analysis</span>
+            </button>
+            <button data-tab="section-data">
+                <span class="nav-icon">&#9776;</span>
+                <span class="nav-label">Data</span>
             </button>
             <button data-tab="section-map">
                 <span class="nav-icon">&#9873;</span>
@@ -106,12 +106,6 @@
             </div>
         </section>
 
-        <!-- DATA GRIDS -->
-        <section id="section-data" class="tab-content" hidden>
-            <h2>Case Items</h2>
-            <div id="grid-cases" class="ag-theme-alpine" style="width:100%; height:600px;"></div>
-        </section>
-
         <!-- ANALYSIS -->
         <section id="section-analysis" class="tab-content" hidden>
             <h2>Analysis</h2>
@@ -120,6 +114,12 @@
                 <select id="analysis-select"></select>
             </div>
             <div id="grid-analysis" class="ag-theme-alpine" style="width:100%; height:600px;"></div>
+        </section>
+
+        <!-- DATA GRIDS -->
+        <section id="section-data" class="tab-content" hidden>
+            <h2>Case Items</h2>
+            <div id="grid-cases" class="ag-theme-alpine" style="width:100%; height:600px;"></div>
         </section>
 
         <!-- MAP -->

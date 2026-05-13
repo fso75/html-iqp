@@ -116,6 +116,8 @@ ReportApp.init = async function () {
             ReportApp.grids.initCaseGrid(document.getElementById('grid-cases'));
           } else if (targetId === 'section-map') {
             ReportApp.map.init('map-container');
+          } else if (targetId === 'section-analysis') {
+              ReportApp.analysis && ReportApp.analysis.init();
           }
         }
 
@@ -124,6 +126,27 @@ ReportApp.init = async function () {
         }
       });
     }
+
+      // Initialize the analysis module in ReportApp namespace
+      ReportApp.analysis = {
+          async init() {
+              // Get all analyses from DB and populate the dropdown
+              const analyses = ReportApp.db.queryAll('SELECT analysis_id, analysis_name FROM call_analyses');
+              const select = document.getElementById('analysis-select');
+              select.innerHTML = '';
+              analyses.forEach(anl =>
+                  select.innerHTML += `<option value="${anl.analysis_id}">${anl.analysis_name}</option>`
+              );
+              // Load grid for the first analysis by default, if present
+              if (analyses.length > 0) {
+                  ReportApp.grids.initAnalysisGrid(document.getElementById('analysis-grid'), analyses[0].analysis_id);
+              }
+              // Event to change grid on selection
+              select.onchange = function () {
+                  ReportApp.grids.initAnalysisGrid(document.getElementById('analysis-grid'), this.value);
+              };
+          }
+      };
 
   } catch (err) {
     loader.querySelector('p').textContent = 'Error loading report: ' + err.message;
