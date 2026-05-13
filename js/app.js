@@ -49,7 +49,6 @@ ReportApp.init = async function () {
     }
     try { localStorage.setItem('report-sidebar', collapsed ? 'collapsed' : 'expanded'); } catch(e) {}
 
-    // Recalc map size after sidebar animation
     setTimeout(function () {
       if (ReportApp.map && ReportApp.map.getMap()) {
         ReportApp.map.getMap().updateSize();
@@ -57,7 +56,6 @@ ReportApp.init = async function () {
     }, 350);
   }
 
-  // Init sidebar: saved preference or expanded by default
   setSidebarState(savedSidebar === 'collapsed');
 
   sidebarToggle.addEventListener('click', function () {
@@ -74,9 +72,16 @@ ReportApp.init = async function () {
     );
     if (meta) {
       var caseMeta = ReportApp.db.queryOne('SELECT * FROM case_meta LIMIT 1');
-      if (caseMeta && caseMeta.case_name) {
-        document.getElementById('case-name').textContent = caseMeta.case_name;
-        document.title = 'Report - ' + caseMeta.case_name;
+      if (caseMeta) {
+        if (caseMeta.case_name) {
+          document.getElementById('case-name').textContent = caseMeta.case_name;
+          document.title = 'Report - ' + caseMeta.case_name;
+        }
+        if (caseMeta.customer_name) {
+          document.getElementById('client-name').textContent = caseMeta.customer_name;
+        } else {
+          document.getElementById('client-name').textContent = '';
+        }
       }
     }
 
@@ -96,19 +101,15 @@ ReportApp.init = async function () {
       buttons[i].addEventListener('click', function () {
         var targetId = this.dataset.tab;
 
-        // Hide all sections
         var sections = document.querySelectorAll('.tab-content');
         for (var j = 0; j < sections.length; j++) sections[j].hidden = true;
 
-        // Show target
         document.getElementById(targetId).hidden = false;
 
-        // Update active button
         var allBtns = document.querySelectorAll('[data-tab]');
         for (var k = 0; k < allBtns.length; k++) allBtns[k].classList.remove('active');
         this.classList.add('active');
 
-        // Lazy init
         if (!tabsInitialised[targetId]) {
           tabsInitialised[targetId] = true;
           if (targetId === 'section-data') {
@@ -118,7 +119,6 @@ ReportApp.init = async function () {
           }
         }
 
-        // OpenLayers needs a size recalc when its container becomes visible
         if (targetId === 'section-map' && ReportApp.map.getMap()) {
           ReportApp.map.getMap().updateSize();
         }

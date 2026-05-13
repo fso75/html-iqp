@@ -84,7 +84,8 @@ $requiredFiles = @(
     "js\grids.js",
     "js\map.js",
     "js\app.js",
-    "img\logo.png"
+    "img\logo.png",
+    "img\clientlogo.png"
 )
 
 $missing = $requiredFiles | Where-Object { -not (Test-Path (Resolve $_)) }
@@ -103,6 +104,10 @@ if (-not (Test-Path $SqlitePath)) {
 Write-Host "[build] Encoding logo..."
 $logoDataUri = ImageToDataUri "img\logo.png"
 Write-Host "         $($logoDataUri.Length.ToString('N0')) chars"
+
+Write-Host "[build] Encoding client logo..."
+$clientLogoDataUri = ImageToDataUri "img\clientlogo.png"
+Write-Host "         $($clientLogoDataUri.Length.ToString('N0')) chars"
 
 Write-Host "[build] Encoding WASM..."
 $wasmB64 = FileToBase64 "js\vendor\sql-wasm.wasm"
@@ -205,7 +210,12 @@ $cssDashboard
         <span class="case-title-name" id="case-name">Loading&hellip;</span>
       </div>
 
-      <div class="theme-toggle">
+      <div class="client-branding">
+        <div class="client-name">
+          <span class="client-name-label">Client</span>
+          <span id="client-name">Loading&hellip;</span>
+        </div>
+        <img src="$clientLogoDataUri" alt="Client" class="client-logo" id="client-logo">
       </div>
     </div>
   </header>
