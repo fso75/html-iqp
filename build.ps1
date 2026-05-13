@@ -162,29 +162,32 @@ $cssDashboard
   </div>
 
   <header>
-    <div class="header-inner">
+    <div class="header-top">
       <div class="branding">
         <img src="$logoDataUri" alt="Gladiator Forensics" class="branding-logo">
-        <div class="branding-text">
-          <span class="branding-company">Gladiator Forensics</span>
-          <span class="branding-title">Case Report &mdash; <span id="case-name">Loading&hellip;</span></span>
-        </div>
+        <span class="branding-company">Gladiator Forensics</span>
       </div>
-      <nav id="main-nav">
-        <button data-tab="section-dashboard" class="active">Dashboard</button>
-        <button data-tab="section-data">Data</button>
-        <button data-tab="section-map">Map</button>
 
-        <div class="theme-toggle">
-          <span class="theme-toggle-label" title="Light mode">&#9728;</span>
-          <label class="theme-switch">
-            <input type="checkbox" id="theme-checkbox">
-            <span class="theme-slider"></span>
-          </label>
-          <span class="theme-toggle-label" title="Dark mode">&#9790;</span>
-        </div>
-      </nav>
+      <div class="case-title">
+        <span class="case-title-label">Case Report</span>
+        <span class="case-title-name" id="case-name">Loading&hellip;</span>
+      </div>
+
+      <div class="theme-toggle">
+        <span class="theme-toggle-label" title="Light mode">&#9728;</span>
+        <label class="theme-switch">
+          <input type="checkbox" id="theme-checkbox">
+          <span class="theme-slider"></span>
+        </label>
+        <span class="theme-toggle-label" title="Dark mode">&#9790;</span>
+      </div>
     </div>
+
+    <nav class="header-nav" id="main-nav">
+      <button data-tab="section-dashboard" class="active">Dashboard</button>
+      <button data-tab="section-data">Data</button>
+      <button data-tab="section-map">Map</button>
+    </nav>
   </header>
 
   <main>

@@ -76,67 +76,82 @@ body {
 header {
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
-  padding: 16px 24px;
+  padding: 12px 24px;
   position: sticky;
   top: 0;
   z-index: 100;
   transition: background 0.3s, border-color 0.3s;
 }
 
-.header-inner {
+.header-top {
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
+  position: relative;
+  min-height: 60px;
 }
 
-/* ===== Branding ===== */
+/* ===== Branding (top-left) ===== */
 .branding {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .branding-logo {
-  height: 36px;
+  height: 56px;
   width: auto;
   object-fit: contain;
 }
 
-.branding-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
+.branding-company {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text);
 }
 
-.branding-company {
-  font-size: 0.75rem;
+/* ===== Case Title (top-center) ===== */
+.case-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.case-title-label {
+  display: block;
+  font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   color: var(--color-text-secondary);
 }
 
-.branding-title {
-  font-size: 1.15rem;
-  font-weight: 600;
-}
-
-header h1 {
+.case-title-name {
+  display: block;
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
 }
 
-#main-nav {
+/* ===== Nav bar (below branding row) ===== */
+.header-nav {
+  max-width: 1400px;
+  margin: 8px auto 0;
   display: flex;
-  gap: 4px;
   align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
-#main-nav button {
+.header-nav button {
   background: transparent;
   border: none;
   padding: 8px 16px;
@@ -147,16 +162,16 @@ header h1 {
   transition: background 0.15s, color 0.15s;
 }
 
-#main-nav button:hover {
+.header-nav button:hover {
   background: var(--color-bg);
 }
 
-#main-nav button.active {
+.header-nav button.active {
   background: var(--color-primary);
   color: #fff;
 }
 
-[data-theme="dark"] #main-nav button.active {
+[data-theme="dark"] .header-nav button.active {
   color: #1e1e1e;
 }
 
@@ -165,8 +180,8 @@ header h1 {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: 12px;
-  padding-left: 12px;
+  margin-left: 16px;
+  padding-left: 16px;
   border-left: 1px solid var(--color-border);
 }
 
@@ -274,7 +289,7 @@ footer {
 
 /* ===== Print ===== */
 @media print {
-  #loader, header nav, footer, .theme-toggle { display: none !important; }
+  #loader, .header-nav, footer, .theme-toggle { display: none !important; }
   header { position: static; }
   .tab-content { display: block !important; }
   .tab-content[hidden] { display: block !important; }
