@@ -36,6 +36,24 @@ function ReadText([string]$relativePath) {
     return [System.IO.File]::ReadAllText($fullPath, [System.Text.Encoding]::UTF8)
 }
 
+function ImageToDataUri([string]$relativePath) {
+    $fullPath = Resolve $relativePath
+    $bytes = [System.IO.File]::ReadAllBytes($fullPath)
+    $b64 = [System.Convert]::ToBase64String($bytes)
+    $ext = [System.IO.Path]::GetExtension($fullPath).TrimStart('.').ToLower()
+    $mime = switch ($ext) {
+        'png'  { 'image/png' }
+        'jpg'  { 'image/jpeg' }
+        'jpeg' { 'image/jpeg' }
+        'svg'  { 'image/svg+xml' }
+        'gif'  { 'image/gif' }
+        'ico'  { 'image/x-icon' }
+        'webp' { 'image/webp' }
+        default { 'image/png' }
+    }
+    return "data:$mime;base64,$b64"
+}
+
 # Resolve input/output paths relative to script root
 $SqlitePath = Resolve $SqlitePath
 $OutputPath = Resolve $OutputPath
@@ -65,7 +83,8 @@ $requiredFiles = @(
     "js\dashboard.js",
     "js\grids.js",
     "js\map.js",
-    "js\app.js"
+    "js\app.js",
+    "img\logo.png"
 )
 
 $missing = $requiredFiles | Where-Object { -not (Test-Path (Resolve $_)) }
@@ -81,6 +100,10 @@ if (-not (Test-Path $SqlitePath)) {
 }
 
 # Encode binary files
+Write-Host "[build] Encoding logo..."
+$logoDataUri = ImageToDataUri "img\logo.png"
+Write-Host "         $($logoDataUri.Length.ToString('N0')) chars"
+
 Write-Host "[build] Encoding WASM..."
 $wasmB64 = FileToBase64 "js\vendor\sql-wasm.wasm"
 Write-Host "         $($wasmB64.Length.ToString('N0')) chars"
@@ -140,7 +163,13 @@ $cssDashboard
 
   <header>
     <div class="header-inner">
-      <h1>Case Report &mdash; <span id="case-name">Loading&hellip;</span></h1>
+      <div class="branding">
+        <img src="$logoDataUri" alt="Gladiator Forensics" class="branding-logo">
+        <div class="branding-text">
+          <span class="branding-company">Gladiator Forensics</span>
+          <span class="branding-title">Case Report &mdash; <span id="case-name">Loading&hellip;</span></span>
+        </div>
+      </div>
       <nav id="main-nav">
         <button data-tab="section-dashboard" class="active">Dashboard</button>
         <button data-tab="section-data">Data</button>

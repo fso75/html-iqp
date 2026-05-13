@@ -93,6 +93,38 @@ header {
   gap: 12px;
 }
 
+/* ===== Branding ===== */
+.branding {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.branding-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
+.branding-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.branding-company {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.branding-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
 header h1 {
   font-size: 1.25rem;
   font-weight: 600;
