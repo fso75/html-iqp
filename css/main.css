@@ -75,6 +75,50 @@ body {
     border-radius: var(--bs-border-radius);
 }
 
+/* ===== Contact ===== */
+#section-contact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - var(--header-height) - 48px);
+}
+
+.contact-center {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 12px;
+    width: min(900px, 100%);
+    margin: 0 auto;
+    padding: 24px 32px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.contact-line {
+    font-size: 1rem;
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+.contact-line strong {
+    color: var(--color-primary);
+    margin-right: 6px;
+}
+
+.contact-line a {
+    color: var(--bs-link-color);
+    text-decoration: none;
+}
+
+.contact-line a:hover {
+    color: var(--bs-link-hover-color);
+    text-decoration: underline;
+}
+
 /* Home section centering and logo spacing */
 .home-center {
     display: flex;
