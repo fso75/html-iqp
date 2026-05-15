@@ -14,7 +14,7 @@ ReportApp.init = async function () {
   var savedTheme = localStorage.getItem('report-theme');
 
   function applyTheme(dark) {
-    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
     themeCheckbox.checked = dark;
     try { localStorage.setItem('report-theme', dark ? 'dark' : 'light'); } catch(e) {}
   }
@@ -41,11 +41,11 @@ ReportApp.init = async function () {
     if (collapsed) {
       sidebar.classList.add('collapsed');
       document.body.classList.add('sidebar-collapsed-state');
-      toggleIcon.innerHTML = '&#9776;';
+        toggleIcon.innerHTML = '<i class="fa-solid fa-bars"></i>';
     } else {
       sidebar.classList.remove('collapsed');
       document.body.classList.remove('sidebar-collapsed-state');
-      toggleIcon.innerHTML = '&#10005;';
+        toggleIcon.innerHTML = '<i class="fa-solid fa-xmark"></i>';
     }
     try { localStorage.setItem('report-sidebar', collapsed ? 'collapsed' : 'expanded'); } catch(e) {}
 
@@ -86,11 +86,11 @@ ReportApp.init = async function () {
     }
 
     // 3. Init the default tab (dashboard)
-    ReportApp.dashboard.init();
-    tabsInitialised['section-dashboard'] = true;
+    // ReportApp.dashboard.init();
+    // tabsInitialised['section-dashboard'] = true;
 
     // 4. Set report date
-    document.getElementById('report-date').textContent = new Date().toLocaleDateString();
+    //document.getElementById('report-date').textContent = new Date().toLocaleDateString();
 
     // 5. Hide loader
     loader.style.display = 'none';
@@ -118,6 +118,8 @@ ReportApp.init = async function () {
             ReportApp.map.init('map-container');
           } else if (targetId === 'section-analysis') {
             ReportApp.analysis.init();
+          } else if (targetId === 'section-dashboard') {
+              ReportApp.dashboard.init();
           }
         }
 

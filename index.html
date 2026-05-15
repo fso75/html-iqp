@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Case Report</title>
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/dashboard.css">
-  <link rel="stylesheet" href="css/vendor/ol.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Report</title>
+
+    <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="css/vendor/ol.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 
@@ -20,40 +22,47 @@
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
-        <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle menu">
-            <span id="sidebar-toggle-icon">&#9776;</span>
+        <button type="button" class="sidebar-toggle" id="sidebar-toggle" title="Toggle menu">
+            <span id="sidebar-toggle-icon"><i class="fa-solid fa-xmark"></i></span>
         </button>
 
         <nav class="sidebar-nav" id="main-nav">
-            <button data-tab="section-dashboard" class="active">
-                <span class="nav-icon">&#9632;</span>
+            <button type="button" data-tab="section-home" class="active">
+                <span class="nav-icon"><i class="fa-solid fa-home"></i></span>
+                <span class="nav-label">Home</span>
+            </button>
+            <button type="button" data-tab="section-dashboard">
+                <span class="nav-icon"><i class="fa-solid fa-gauge"></i></span>
                 <span class="nav-label">Dashboard</span>
             </button>
-            <button data-tab="section-analysis">
-                <span class="nav-icon">&#128200;</span>
+            <button type="button" data-tab="section-analysis">
+                <span class="nav-icon"><i class="fa-solid fa-chart-bar"></i></span>
                 <span class="nav-label">Analysis</span>
             </button>
-            <button data-tab="section-data">
-                <span class="nav-icon">&#9776;</span>
+            <button type="button" data-tab="section-data">
+                <span class="nav-icon"><i class="fa-solid fa-table"></i></span>
                 <span class="nav-label">Data</span>
             </button>
-            <button data-tab="section-map">
-                <span class="nav-icon">&#9873;</span>
+            <button type="button" data-tab="section-map">
+                <span class="nav-icon"><i class="fa-solid fa-map"></i></span>
                 <span class="nav-label">Map</span>
             </button>
+            <button type="button" data-tab="section-contact">
+                <span class="nav-icon"><i class="fa-solid fa-envelope"></i></span>
+                <span class="nav-label">Contact</span>
+            </button>            
         </nav>
 
         <div class="sidebar-footer">
-            <span class="theme-toggle-label" title="Light mode">&#9728;</span>
-            <label class="theme-switch">
+            <span class="theme-toggle-label" title="Light mode"><i class="fa-solid fa-sun"></i></span>
+            <label class="theme-switch" for="theme-checkbox">
                 <input type="checkbox" id="theme-checkbox">
                 <span class="theme-slider"></span>
             </label>
-            <span class="theme-toggle-label theme-label-text" title="Dark mode">&#9790;</span>
+            <span class="theme-toggle-label theme-label-text" title="Dark mode"><i class="fa-solid fa-moon"></i></span>
         </div>
     </aside>
 
-    <!-- Header -->
     <header>
         <div class="header-top">
             <div class="branding">
@@ -74,8 +83,20 @@
     </header>
 
     <main>
+        <!-- HOME -->
+        <section id="section-home" class="tab-content home-tab">
+            <div class="home-center">
+                <div class="home-title">
+                    <div class="home-line1">Powered by:</div>
+                    <div class="home-line2">GLADIATOR FORENSICS</div>
+                    <div class="home-line3">THE NEXT GENERATION IN WIRELESS NETWORK FORENSICS</div>
+                </div>
+                <img class="home-logo" src="img/gladiator.png" alt="Gladiator">
+            </div>
+        </section>
+
         <!-- DASHBOARD -->
-        <section id="section-dashboard" class="tab-content">
+        <section id="section-dashboard" class="tab-content" hidden>
             <div class="kpi-row">
                 <div class="kpi-card">
                     <h3>Total Items</h3>
@@ -94,6 +115,7 @@
                     <span id="kpi-amount" class="kpi-value">&mdash;</span>
                 </div>
             </div>
+
             <div class="chart-row">
                 <div class="chart-container">
                     <h3>Status Distribution</h3>
@@ -108,38 +130,43 @@
 
         <!-- ANALYSIS -->
         <section id="section-analysis" class="tab-content" hidden>
-            <h2>Analysis</h2>
-            <div id="analysis-controls" style="margin-bottom: 16px;">
-                <label for="analysis-select">Choose analysis type: </label>
-                <select id="analysis-select"></select>
+            <div id="analysis-controls" class="mb-3" style="max-width: 320px;">
+                <select id="analysis-select" class="form-select"></select>
             </div>
             <div id="grid-analysis" class="ag-theme-alpine" style="width:100%; height:600px;"></div>
         </section>
 
-        <!-- DATA GRIDS -->
+        <!-- DATA -->
         <section id="section-data" class="tab-content" hidden>
-            <h2>Case Items</h2>
             <div id="grid-cases" class="ag-theme-alpine" style="width:100%; height:600px;"></div>
         </section>
 
         <!-- MAP -->
         <section id="section-map" class="tab-content" hidden>
-            <h2>Locations</h2>
             <div id="map-container" style="width:100%; height:600px;"></div>
         </section>
+
+        <!-- Contact -->
+        <section id="section-contact" class="tab-content" hidden>
+            <div><strong>Gladiator Forensics</strong> 100 Rialto Place, Suite 605 Melbourne, FL 32901</div><br/>
+            <div><strong>Sales</strong> (202) 465-4753 / <a href="mailto:sales@gladiator-forensics.com">sales@gladiator-forensics.com</a></div><br/>
+            <div><strong>Support</strong> (202) 465-4758 / <a href="mailto:support@gladiator-forensics.com">support@gladiator-forensics.com</a></div><br/>
+            <div><strong>Web</strong> <a href="http://www.gladiator-forensics.com/" target="_blank">www.gladiator-forensics.com</a></div><br/>
+        </section>        
     </main>
 
-    <footer>
+    <!--<footer>
         <p>Report generated on <span id="report-date"></span></p>
-    </footer>
+    </footer>-->
 
-    <!-- Vendor libraries (classic scripts, file:// safe) -->
+    <!-- Vendor libraries -->
     <script src="js/vendor/sql-wasm.js"></script>
     <script src="js/vendor/ag-grid-community.min.js"></script>
     <script src="js/vendor/chart.umd.min.js"></script>
     <script src="js/vendor/ol.js"></script>
+    <script src="js/vendor/fa.js"></script>
 
-    <!-- App modules (order matters) -->
+    <!-- App modules -->
     <script src="js/db.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/dashboard.js"></script>

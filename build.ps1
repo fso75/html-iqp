@@ -75,7 +75,9 @@ $requiredFiles = @(
     "js\vendor\ag-grid-community.min.js",
     "js\vendor\chart.umd.min.js",
     "js\vendor\ol.js",
+    "js\vendor\fa.js",
     "css\vendor\ol.css",
+    "css\vendor\bootstrap.min.css",
     "css\main.css",
     "css\dashboard.css",
     "js\db.js",
@@ -85,7 +87,8 @@ $requiredFiles = @(
     "js\map.js",
     "js\app.js",
     "img\logo.png",
-    "img\clientlogo.png"
+    "img\clientlogo.png",
+    "img\gladiator.png"
 )
 
 $missing = $requiredFiles | Where-Object { -not (Test-Path (Resolve $_)) }
@@ -109,6 +112,10 @@ Write-Host "[build] Encoding client logo..."
 $clientLogoDataUri = ImageToDataUri "img\clientlogo.png"
 Write-Host "         $($clientLogoDataUri.Length.ToString('N0')) chars"
 
+Write-Host "[build] Encoding gladiator logo..."
+$gladiatorLogoDataUri = ImageToDataUri "img\gladiator.png"
+Write-Host "         $($gladiatorLogoDataUri.Length.ToString('N0')) chars"
+
 Write-Host "[build] Encoding WASM..."
 $wasmB64 = FileToBase64 "js\vendor\sql-wasm.wasm"
 Write-Host "         $($wasmB64.Length.ToString('N0')) chars"
@@ -123,11 +130,13 @@ Write-Host "[build] Reading assets..."
 $cssMain      = ReadText "css\main.css"
 $cssDashboard = ReadText "css\dashboard.css"
 $cssOl        = ReadText "css\vendor\ol.css"
+$cssBs        = ReadText "css\vendor\bootstrap.min.css"
 
 $jsSqlWasm    = ReadText "js\vendor\sql-wasm.js"
 $jsAgGrid     = ReadText "js\vendor\ag-grid-community.min.js"
 $jsChartJs    = ReadText "js\vendor\chart.umd.min.js"
 $jsOl         = ReadText "js\vendor\ol.js"
+$jsFa         = ReadText "js\vendor\fa.js"
 
 $jsDb         = ReadText "js\db.js"
 $jsCharts     = ReadText "js\charts.js"
@@ -141,7 +150,7 @@ Write-Host "[build] Assembling HTML..."
 
 $html = @"
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -149,6 +158,9 @@ $html = @"
   <style>
 $cssOl
   </style>
+  <style>
+$cssBs
+  </style>  
   <style>
 $cssMain
   </style>
@@ -166,40 +178,48 @@ $cssDashboard
     </div>
   </div>
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle menu">
-      <span id="sidebar-toggle-icon">&#9776;</span>
-    </button>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle menu">
+            <span id="sidebar-toggle-icon"><i class="fa-solid fa-xmark"></i></span>
+        </button>
 
-    <nav class="sidebar-nav" id="main-nav">
-      <button data-tab="section-dashboard" class="active">
-        <span class="nav-icon">&#9632;</span>
-        <span class="nav-label">Dashboard</span>
-      </button>
-      <button data-tab="section-analysis">
-          <span class="nav-icon">&#128200;</span>
-          <span class="nav-label">Analysis</span>
-      </button>
-      <button data-tab="section-data">
-        <span class="nav-icon">&#9776;</span>
-        <span class="nav-label">Data</span>
-      </button>
-      <button data-tab="section-map">
-        <span class="nav-icon">&#9873;</span>
-        <span class="nav-label">Map</span>
-      </button>
-    </nav>
+        <nav class="sidebar-nav" id="main-nav">
+            <button type="button" data-tab="section-home" class="active">
+                <span class="nav-icon"><i class="fa-solid fa-home"></i></span>
+                <span class="nav-label">Home</span>
+            </button>        
+            <button data-tab="section-dashboard">
+                <span class="nav-icon"><i class="fa-solid fa-gauge"></i></span>
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button data-tab="section-analysis">
+                <span class="nav-icon"><i class="fa-solid fa-chart-bar"></i></span>
+                <span class="nav-label">Analysis</span>
+            </button>
+            <button data-tab="section-data">
+                <span class="nav-icon"><i class="fa-solid fa-table"></i></span>
+                <span class="nav-label">Data</span>
+            </button>
+            <button data-tab="section-map">
+                <span class="nav-icon"><i class="fa-solid fa-map"></i></span>
+                <span class="nav-label">Map</span>
+            </button>
+            <button type="button" data-tab="section-contact">
+                <span class="nav-icon"><i class="fa-solid fa-envelope"></i></span>
+                <span class="nav-label">Contact</span>
+            </button>            
+        </nav>
 
-    <div class="sidebar-footer">
-      <span class="theme-toggle-label" title="Light mode">&#9728;</span>
-      <label class="theme-switch">
-        <input type="checkbox" id="theme-checkbox">
-        <span class="theme-slider"></span>
-      </label>
-      <span class="theme-toggle-label theme-label-text" title="Dark mode">&#9790;</span>
-    </div>
-  </aside>
+        <div class="sidebar-footer">
+            <span class="theme-toggle-label" title="Light mode"><i class="fa-solid fa-sun"></i></span>
+            <label class="theme-switch">
+                <input type="checkbox" id="theme-checkbox">
+                <span class="theme-slider"></span>
+            </label>
+            <span class="theme-toggle-label theme-label-text" title="Dark mode"><i class="fa-solid fa-moon"></i></span>
+        </div>
+    </aside>
 
   <!-- Header -->
   <header>
@@ -222,7 +242,17 @@ $cssDashboard
   </header>
 
   <main>
-    <section id="section-dashboard" class="tab-content">
+    <section id="section-home" class="tab-content home-tab">
+        <div class="home-center">
+            <div class="home-title">
+                <div class="home-line1">Powered by:</div>
+                <div class="home-line2">GLADIATOR FORENSICS</div>
+                <div class="home-line3">THE NEXT GENERATION IN WIRELESS NETWORK FORENSICS</div>
+            </div>
+            <img class="home-logo" src="$gladiatorLogoDataUri" alt="Gladiator">
+        </div>
+    </section>
+    <section id="section-dashboard" class="tab-content" hidden>
       <div class="kpi-row">
         <div class="kpi-card">
           <h3>Total Items</h3>
@@ -254,28 +284,27 @@ $cssDashboard
     </section>
 
     <section id="section-analysis" class="tab-content" hidden>
-        <h2>Analysis</h2>
         <div id="analysis-controls" style="margin-bottom: 16px;">
-            <label for="analysis-select">Choose analysis type: </label>
-            <select id="analysis-select"></select>
+            <select id="analysis-select" class="form-select w-auto"></select>
         </div>
         <div id="grid-analysis" class="ag-theme-alpine" style="width:100%; height:600px;"></div>
     </section>
 
     <section id="section-data" class="tab-content" hidden>
-      <h2>Case Items</h2>
       <div id="grid-cases" class="ag-theme-alpine" style="width:100%; height:600px;"></div>
     </section>
 
     <section id="section-map" class="tab-content" hidden>
-      <h2>Locations</h2>
       <div id="map-container" style="width:100%; height:600px;"></div>
     </section>
-  </main>
 
-  <footer>
-    <p>Report generated on <span id="report-date"></span></p>
-  </footer>
+    <section id="section-contact" class="tab-content" hidden>
+        <div><strong>Gladiator Forensics</strong> 100 Rialto Place, Suite 605 Melbourne, FL 32901</div><br/>
+        <div><strong>Sales</strong> (202) 465-4753 / <a href="mailto:sales@gladiator-forensics.com">sales@gladiator-forensics.com</a></div><br/>
+        <div><strong>Support</strong> (202) 465-4758 / <a href="mailto:support@gladiator-forensics.com">support@gladiator-forensics.com</a></div><br/>
+        <div><strong>Web</strong> <a href="http://www.gladiator-forensics.com/" target="_blank">www.gladiator-forensics.com</a></div><br/>
+    </section>    
+  </main>
 
   <script>
     window.__INLINE_WASM_BASE64 = "$wasmB64";
@@ -294,6 +323,9 @@ $jsChartJs
   <script>
 $jsOl
   </script>
+  <script>
+$jsFa
+  </script>  
 
   <script>
 $jsDb

@@ -10,6 +10,14 @@ ReportApp.grids = (function () {
     var db = function () { return ReportApp.db; };
     var _gridApi = null;
 
+    // Shared AG Grid theme for all grids
+    var _sharedTheme = agGrid.themeQuartz.withParams({
+        headerTextColor: "white",
+        headerBackgroundColor: "#175288",
+        headerCellHoverBackgroundColor: "#134572",
+        headerCellMovingBackgroundColor: "#134572"
+    });
+
     /**
      * Initialise the main case-items grid.
      */
@@ -19,6 +27,7 @@ ReportApp.grids = (function () {
         var rowData = db().query('SELECT * FROM case_items ORDER BY date DESC');
 
         var gridOptions = {
+            theme: _sharedTheme,
             columnDefs: [
                 { field: 'id', headerName: 'ID', width: 90, sortable: true, filter: true },
                 { field: 'date', headerName: 'Date', width: 130, sortable: true, filter: true },
@@ -26,7 +35,11 @@ ReportApp.grids = (function () {
                 { field: 'category', headerName: 'Category', width: 140, sortable: true, filter: true },
                 { field: 'description', headerName: 'Description', flex: 1, sortable: true, filter: true },
                 {
-                    field: 'amount', headerName: 'Amount', width: 120, sortable: true, filter: 'agNumberColumnFilter',
+                    field: 'amount',
+                    headerName: 'Amount',
+                    width: 120,
+                    sortable: true,
+                    filter: 'agNumberColumnFilter',
                     valueFormatter: function (params) {
                         if (params.value == null) return '';
                         return '$' + Number(params.value).toLocaleString();
@@ -51,19 +64,22 @@ ReportApp.grids = (function () {
     // ------ Analysis grid ------
     function initAnalysisGrid(containerEl, analysisId) {
         if (!containerEl) return;
-        // Get SQL from analysis table
+
         var analysis = db().queryOne('SELECT sql FROM call_analyses WHERE analysis_id=?', [analysisId]);
         if (!analysis || !analysis.sql) {
             containerEl.innerHTML = '<div style="color:red">Analysis SQL not found!</div>';
             return;
         }
+
         console.log("Will run analysis SQL:", analysis.sql);
         var rows = db().query(analysis.sql);
         console.log("Grid result rows:", rows);
+
         if (!rows || rows.length === 0) {
             containerEl.innerHTML = '<div>No data for this analysis.</div>';
             return;
         }
+
         var columnDefs = Object.keys(rows[0]).map(function (k) {
             return {
                 headerName: k.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); }),
@@ -73,15 +89,23 @@ ReportApp.grids = (function () {
                 resizable: true
             };
         });
+
         containerEl.innerHTML = '';
+
         var gridDiv = document.createElement('div');
         gridDiv.style.width = '100%';
         gridDiv.style.height = '100%';
         containerEl.appendChild(gridDiv);
-        new agGrid.Grid(gridDiv, {
+
+        agGrid.createGrid(gridDiv, {
+            theme: _sharedTheme,
             columnDefs: columnDefs,
             rowData: rows,
-            defaultColDef: { flex: 1 }
+            defaultColDef: {
+                flex: 1,
+                resizable: true
+            },
+            animateRows: true
         });
     }
 
